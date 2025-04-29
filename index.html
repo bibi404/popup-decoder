@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+
+    <link
+      rel="stylesheet"
+      href="http://esironal.github.io/cmtouch/lib/codemirror.css"
+    />
+    <link
+      rel="stylesheet"
+      href="http://esironal.github.io/cmtouch/addon/hint/show-hint.css"
+    />
+    <script src="http://esironal.github.io/cmtouch/lib/codemirror.js"></script>
+    <script src="http://esironal.github.io/cmtouch/addon/hint/show-hint.js"></script>
+    <script src="http://esironal.github.io/cmtouch/addon/hint/xml-hint.js"></script>
+    <script src="http://esironal.github.io/cmtouch/addon/hint/html-hint.js"></script>
+    <script src="http://esironal.github.io/cmtouch/mode/xml/xml.js"></script>
+    <script src="http://esironal.github.io/cmtouch/mode/javascript/javascript.js"></script>
+    <script src="http://esironal.github.io/cmtouch/mode/css/css.js"></script>
+    <script src="http://esironal.github.io/cmtouch/mode/htmlmixed/htmlmixed.js"></script>
+    <script src="http://esironal.github.io/cmtouch/addon/selection/active-line.js"></script>
+    <script src="http://esironal.github.io/cmtouch/addon/edit/matchbrackets.js"></script>
+
+    <link
+      rel="stylesheet"
+      href="http://esironal.github.io/cmtouch/theme/neonsyntax.css"
+    />
+
+    <style type="text/css">
+      .CodeMirror {
+        font-size: 15px;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>IAM TO HTML! DOHEE</h1>
+    <div style="width: 100%; height: 100vh">
+      <textarea id="input" style="width: 100%" placeholder="input"></textarea>
+      <pre
+        style="
+          width: 100%;
+          height: 700px;
+          border: 1px solid black;
+          overflow: wrap;
+        "
+      ><code
+        id="output"
+      
+      ></code></pre>
+    </div>
+
+    <script type="text/javascript">
+      CodeMirror.commands.autocomplete = function (cm) {
+        CodeMirror.showHint(cm, CodeMirror.hint.html);
+      };
+
+      const editor = CodeMirror(document.getElementById("output"), {
+        mode: "text/html",
+        theme: "neonsyntax",
+        lineWrapping: true,
+        lineNumbers: true,
+        styleActiveLine: true,
+        matchBrackets: true,
+
+        extraKeys: {
+          "Ctrl-Space": "autocomplete",
+        },
+        value: "",
+      });
+
+      const input = document.getElementById("input");
+      const output = document.getElementById("output");
+
+      function convert(code) {
+        const startIndex = code.indexOf("document.write");
+        const endIndex = code.lastIndexOf(`\<\/script>`);
+        return code
+          .slice(startIndex, endIndex)
+          .replace("document.write", "")
+          .replace("Base64.decode", "window.atob")
+          .replace("Base64.decode", "window.atob");
+      }
+      input.addEventListener("input", (e) => {
+        editor.doc.setValue(eval(convert(e.target.value)));
+      });
+    </script>
+  </body>
+</html>
