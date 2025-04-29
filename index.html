@@ -39,6 +39,9 @@
     <h1>IAM TO HTML! DOHEE</h1>
     <div style="width: 100%; height: 100vh">
       <textarea id="input" style="width: 100%" placeholder="input"></textarea>
+      <div>
+        <button id="copyButton" style="margin-top: 10px;">Copy to Clipboard</button>
+      </div>
       <pre
         style="
           width: 100%;
@@ -73,6 +76,7 @@
 
       const input = document.getElementById("input");
       const output = document.getElementById("output");
+      const copyButton = document.getElementById("copyButton");
 
       function convert(code) {
         const startIndex = code.indexOf("document.write");
@@ -85,6 +89,18 @@
       }
       input.addEventListener("input", (e) => {
         editor.doc.setValue(eval(convert(e.target.value)));
+      });
+      copyButton.addEventListener("click", () => {
+        // Copy the editor's value to the clipboard
+        const textToCopy = editor.doc.getValue();
+        navigator.clipboard
+          .writeText(textToCopy)
+          .then(() => {
+            alert("Copied to clipboard!");
+          })
+          .catch((err) => {
+            console.error("Failed to copy text: ", err);
+          });
       });
     </script>
   </body>
